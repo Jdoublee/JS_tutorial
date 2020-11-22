@@ -10,5 +10,5 @@
 
 
 
-[Part1_정리](JS_tutorial/Part1/Part1_정리.md)
+[Part1_정리](/Part1/Part1_정리.md)
 
