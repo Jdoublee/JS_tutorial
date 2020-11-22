@@ -7,3 +7,8 @@
 
 
 - 참고 사이트 - [모던 자바스크립트 튜토리얼](https://ko.javascript.info/)
+
+
+
+[Part1_정리](JS_tutorial/Part1/Part1_정리.md)
+
