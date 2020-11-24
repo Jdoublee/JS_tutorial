@@ -342,11 +342,59 @@ alert( a ); // 3 (1 + 2의 결과)
 
 ### [09] 비교 연산자
 
+- 자바스크립트는 **'사전’순으로 문자열을 비교** 합니다. '사전편집(lexicographical)'순 이라고 불리기도 하는 이 기준을 적용하면 사전 뒤쪽의 문자열은 사전 앞쪽의 문자열보다 크다고 판단됩니다.
+  - 정확히는 사전순이 아니라 **유니코드** 순입니다.
+- 비교하려는 값의 자료형이 다르면 자바스크립트는 이 값들을 숫자형으로 바꿉니다.
+  - 불린값의 경우 true는 1, false는 0으로 변환된 후 비교가 이뤄집니다.
+
+```javascript
+alert( '2' > 1 ); // true, 문자열 '2'가 숫자 2로 변환된 후 비교가 진행됩니다.
+alert( '01' == 1 ); // true, 문자열 '01'이 숫자 1로 변환된 후 비교가 진행됩니다.
+
+alert( 0 == false ); // true
+alert( '' == false ); // true
+```
+
+- 일치 연산자(strict equality operator) **`===`** 를 사용하면 형 변환 없이 값을 비교할 수 있습니다.
+  - 자료형의 동등 여부까지 검사
+  - “불일치” 연산자 `!==`는 부등 연산자 `!=`의 엄격한 형태입니다.
+
+```javascript
+alert( 0 === false ); // false, 피연산자의 형이 다르기 때문입니다.
+```
+
+- null이나 undefined와 비교하기
+
+```javascript
+alert( null === undefined ); // false - 두 값의 자료형이 다르기 때문에 일치 비교 시 거짓이 반환
+alert( null == undefined ); // true - '각별한 커플’처럼 취급
+```
+
+- `null`과 0을 비교해 봅시다.
+  - `null`은 `0`, `undefined`는 `NaN`으로 변합니다.
+
+```javascript
+alert( null > 0 );  // (1) false - 숫자형 0으로 변환
+alert( null == 0 ); // (2) false - 동등연산자는 형변환 일어나지 않음. null 과 0 은 같지 않으므로 false
+alert( null >= 0 ); // (3) true - 숫자형 0으로 변환
+```
+
+- `undefined`를 다른 값과 비교해서는 안 됩니다.
+  - `undefined`가 `NaN`으로 변환되는데(숫자형으로의 변환), `NaN`이 피연산자인 경우 비교 연산자는 항상 `false`를 반환합니다.
+
+```javascript
+alert( undefined > 0 ); // false (1) - 숫자형 NaN 으로 변환
+alert( undefined < 0 ); // false (2) - 숫자형 NaN 으로 변환
+alert( undefined == 0 ); // false (3) - 동등연산자는 형변환 일어나지 않음. undefined 와 0 은 같지 않으므로 false
+```
+
 
 
 
 
 ### [10] if와 '?'를 사용한 조건 처리
+
+- if 문과 삼항연산
 
 
 
