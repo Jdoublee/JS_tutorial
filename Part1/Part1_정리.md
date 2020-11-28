@@ -561,6 +561,66 @@ switch (+a) {
 
 ### [15] 함수
 
+- 함수는 프로그램을 구성하는 주요 '구성 요소(building block)'입니다.
+- *함수 선언(function declaration)* 방식을 이용하면 함수를 만들 수 있습니다.
+
+```javascript
+function showMessage() {
+  alert( '안녕하세요!' );
+}
+showMessage();
+```
+
+- `function` 키워드, *함수 이름*, 괄호로 둘러싼 매개변수를 차례로 써주면 함수를 선언할 수 있습니다.
+
+```javascript
+function name(parameters) {
+  ...함수 본문...
+}
+```
+
+- 함수 내에서 선언한 변수인 지역 변수(local variable)는 함수 안에서만 접근할 수 있습니다.
+- 함수 내부에서 함수 외부의 변수인 외부 변수(outer variable)에 접근할 수 있습니다.
+- 매개변수(parameter)를 이용하면 임의의 데이터를 함수 안에 전달할 수 있습니다.
+  - 함수는 언제나 복사된 값을 사용합니다.
+  - 매개변수에 값을 전달하지 않으면 그 값은 **`undefined`** 가 됩니다.
+
+```javascript
+function showMessage(from, text) {
+
+  from = '*' + from + '*'; // "from"을 좀 더 멋지게 꾸며줍니다.
+
+  alert( from + ': ' + text );
+}
+
+let from = "Ann";
+
+showMessage(from, "Hello"); // *Ann*: Hello
+
+// 함수는 복사된 값을 사용하기 때문에 바깥의 "from"은 값이 변경되지 않습니다.
+alert( from ); // Ann
+```
+
+- 함수를 호출했을 때 함수를 호출한 그곳에 특정 값을 반환하게 할 수 있습니다. 이때 이 특정 값을 반환 값(return value)이라고 부릅니다.
+  - `return`문이 없거나 `return` 지시자만 있는 함수는 **`undefined`** 를 반환합니다.
+
+- 함수가 어떤 동작을 하는지 축약해서 설명해주는 동사를 접두어로 붙여 함수 이름을 만드는 게 관습입니다. 
+  - `"show…"` – 무언가를 보여줌
+  - `"get…"` – 값을 반환함
+  - `"calc…"` – 무언가를 계산함
+  - `"create…"` – 무언가를 생성함
+  - `"check…"` – 무언가를 확인하고 불린값을 반환함
+
+```javascript
+showMessage(..)     // 메시지를 보여줌
+getAge(..)          // 나이를 나타내는 값을 얻고 그 값을 반환함
+calcSum(..)         // 합계를 계산하고 그 결과를 반환함
+createForm(..)      // form을 생성하고 만들어진 form을 반환함
+checkPermission(..) // 승인 여부를 확인하고 true나 false를 반환함
+```
+
+
+
 
 
 
