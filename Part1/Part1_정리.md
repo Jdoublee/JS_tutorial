@@ -2,7 +2,7 @@
 
 > 모던 JavaScript 튜토리얼 - https://ko.javascript.info
 
-
+## 자바스크립트 기본
 
 ### [01] Hello, World! 
 
@@ -623,9 +623,144 @@ checkPermission(..) // 승인 여부를 확인하고 true나 false를 반환함
 
 
 
-
-
 ### [16] 함수 표현식
+
+- 자바스크립트는 함수를 **특별한 종류의 값** 으로 취급합니다. 다른 언어에서처럼 "특별한 동작을 하는 구조"로 취급되지 않습니다.
+- 자바스크립트는 괄호가 있어야만 함수가 호출됩니다.
+
+```javascript
+function sayHi() {
+  alert( "Hello" );
+}
+alert( sayHi ); // 함수 코드가 보임
+```
+
+- 매개변수가 3개 있는 함수, `ask(question, yes, no)`를 작성해보겠습니다. 각 매개변수에 대한 설명은 아래와 같습니다.
+
+  - `question` : 질문
+  - `yes` : "Yes"라고 답한 경우 실행되는 함수
+  - `no` : "No"라고 답한 경우 실행되는 함수
+  - 함수는 반드시 `question(질문)`을 해야 하고, 사용자의 답변에 따라 `yes()` 나 `no()`를 호출합니다.
+
+  ```javascript
+  function ask(question, yes, no) {
+    if (confirm(question)) yes()
+    else no();
+  }
+  
+  function showOk() {
+    alert( "동의하셨습니다." );
+  }
+  
+  function showCancel() {
+    alert( "취소 버튼을 누르셨습니다." );
+  }
+  
+  // 사용법: 함수 showOk와 showCancel가 ask 함수의 인수로 전달됨
+  ask("동의하십니까?", showOk, showCancel);
+  ```
+
+  - 함수 `ask` 의 인수, `showOk` 와 `showCancel` 은 ***콜백 함수*** 또는 *콜백*이라고 불립니다.
+  - 아래와 같이 함수 표현식을 사용하면 코드 길이가 짧아집니다.
+    - 이렇게 이름 없이 선언한 함수는 ***익명 함수(anonymous function)*** 라고 부릅니다. 익명 함수는 (변수에 할당된 게 아니기 때문에) `ask` 바깥에선 접근할 수 없습니다. 
+
+  ```javascript
+  function ask(question, yes, no) {
+    if (confirm(question)) yes()
+    else no();
+  }
+  
+  ask(
+    "동의하십니까?",
+    function() { alert("동의하셨습니다."); },
+    function() { alert("취소 버튼을 누르셨습니다."); }
+  );
+  ```
+
+- 함수 표현식과 선언문의 차이에 대해 알아봅시다.
+
+  - *함수 선언문 :* 함수는 주요 코드 흐름 중간에 독자적인 구문 형태로 존재합니다.
+
+  ```javascript
+  // 함수 선언문
+  function sum(a, b) {
+    return a + b;
+  }
+  ```
+
+  - *함수 표현식 :* 함수는 표현식이나 구문 구성(syntax construct) 내부에 생성됩니다. 아래 예시에선 함수가 할당 연산자 `=`를 이용해 만든 “할당 표현식” 우측에 생성되었습니다.
+
+  ```javascript
+  // 함수 표현식
+  let sum = function(a, b) {
+    return a + b;
+  };
+  ```
+
+  - 두 번째 차이는 자바스크립트 엔진이 ***언제*** 함수를 생성하는지에 있습니다.
+
+    - 함수 표현식은 실제 실행 흐름이 **해당 함수에 도달했을 때** 함수를 생성합니다. 따라서 실행 흐름이 함수에 도달했을 때부터 해당 함수를 사용할 수 있습니다. 아주 늦죠.
+
+    ```javascript
+    sayHi("John"); // error!
+    
+    let sayHi = function(name) {  // (*) 마술은 일어나지 않습니다.
+      alert( `Hello, ${name}` );
+    };
+    ```
+
+    - 함수 선언문은 **함수 선언문이 정의되기 전에도 호출** 할 수 있습니다.
+
+    ```javascript
+    sayHi("John"); // Hello, John
+    
+    function sayHi(name) {
+      alert( `Hello, ${name}` );
+    }
+    ```
+
+  - 세 번째 차이점은, **스코프** 입니다. 엄격 모드에서 함수 선언문이 코드 블록 내에 위치하면 해당 함수는 블록 내 어디서든 접근할 수 있습니다. 하지만 블록 밖에서는 함수에 접근하지 못합니다.
+
+  ```javascript
+  let age = 16; // 16을 저장했다 가정합시다.
+  
+  if (age < 18) {
+    welcome();               // \   (실행)
+    function welcome() {     //  |
+      alert("안녕!");         //  |  함수 선언문은 함수가 선언된 블록 내
+    }                        //  |  어디에서든 유효합니다
+    welcome();               // /   (실행)
+  } else {
+    function welcome() {
+      alert("안녕하세요!");
+    }
+  }
+  // 여기는 중괄호 밖이기 때문에
+  // 중괄호 안에서 선언한 함수 선언문은 호출할 수 없습니다.
+  welcome(); // Error: welcome is not defined
+  ```
+
+  - 그럼 `if`문 밖에서 `welcome` 함수를 호출할 방법은 없는 걸까요?
+
+    - 함수 표현식을 사용하면 가능합니다.
+
+    ```javascript
+    let age = prompt("나이를 알려주세요.", 18);
+    let welcome; // 변수 미리 선언
+    
+    if (age < 18) {
+      welcome = function() {
+        alert("안녕!");
+      };
+    } else {
+      welcome = function() {
+        alert("안녕하세요!");
+      };
+    }
+    welcome(); // 제대로 동작합니다.
+    ```
+
+- **함수 선언문** 을 이용해 함수를 선언하는 걸 먼저 고려하는 게 좋습니다. 함수 선언문으로 함수를 정의하면, 함수가 선언되기 전에 호출할 수 있어서 코드 구성을 좀 더 자유롭게 할 수 있습니다.
 
 
 
@@ -633,11 +768,96 @@ checkPermission(..) // 승인 여부를 확인하고 true나 false를 반환함
 
 ### [17] 화살표 함수 기본
 
+- 함수 표현식보다 단순하고 간결한 문법으로 함수를 만들 수 있는 방법이 있습니다. 바로 **화살표 함수(arrow function)** 를 사용하는 것입니다.
+
+```javascript
+let func = (arg1, arg2, ...argN) => expression // 화살표 함수
+// 아래는 화살표 함수의 함수표현식 형태
+let func = function(arg1, arg2, ...argN) {
+  return expression;
+};
+```
+
+- 인수가 하나밖에 없다면 인수를 감싸는 괄호를 생략할 수 있습니다. 괄호를 생략하면 코드 길이를 더 줄일 수 있습니다.
+
+```javascript
+let double = n => n * 2;
+// let double = function(n) { return n * 2 }과 거의 동일합니다.
+alert( double(3) ); // 6
+```
+
+- 인수가 하나도 없을 땐 괄호를 비워놓으면 됩니다. 다만, 이 때 괄호는 생략할 수 없습니다.         
+
+```javascript
+let sayHi = () => alert("안녕하세요!");
+sayHi();
+```
+
+- 화살표 함수는 함수 표현식과 같은 방법으로 사용할 수 있습니다.
+
+```javascript
+let age = prompt("나이를 알려주세요.", 18);
+let welcome = (age < 18) ?
+  () => alert('안녕') :
+  () => alert("안녕하세요!");
+welcome();
+```
+
+- 함수 본문이 한 줄인 간단한 함수는 화살표 함수를 사용해서 만드는 게 편리합니다.
+- 평가해야 할 표현식이나 구문이 여러 개인 함수가 있을 수도 있습니다. 이 경우 역시 화살표 함수 문법을 사용해 함수를 만들 수 있습니다. 다만, 이때는 **중괄호** 안에 평가해야 할 코드를 넣어주어야 합니다. 그리고 **`return`** 지시자를 사용해 명시적으로 결괏값을 반환해 주어야 합니다.
+
+```javascript
+let sum = (a, b) => {  // 중괄호는 본문 여러 줄로 구성되어 있음을 알려줍니다.
+  let result = a + b;
+  return result; // 중괄호를 사용했다면, return 지시자로 결괏값을 반환해주어야 합니다.
+};
+alert( sum(1, 2) ); // 3
+```
+
 
 
 
 
 ### [18] 기본 문법 요약
 
+https://ko.javascript.info/javascript-specials
 
 
+
+
+
+## 코드 품질
+
+### [01] Chrome으로 디버깅하기
+
+- **디버깅(debugging)** 은 스크립트 내 에러를 검출해 제거하는 일련의 과정을 의미합니다.
+
+
+
+
+
+### [02] 코딩 스타일
+
+
+
+
+
+### [03] 주석
+
+
+
+
+
+### [04] 닌자 코드
+
+
+
+
+
+### [05] 테스트 자동화와 Mocha
+
+
+
+
+
+### [06] 폴리필
