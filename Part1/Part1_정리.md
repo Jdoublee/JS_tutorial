@@ -928,11 +928,121 @@ https://ko.javascript.info/javascript-specials
 
 ### [02] 코딩 스타일
 
+- 개발자는 가능한 한 간결하고 읽기 쉽게 코드를 작성해야 합니다.
+
+  1. **중괄호**
+
+  - 대부분의 자바스크립트 프로젝트에서 여는 중괄호는 ‘이집션(Egyptian)’ 스타일을 따라 새로운 줄이 아닌 상응하는 키워드와 같은 줄에 작성합니다. 여기에 더하여 여는 중괄호 앞엔 공백이 하나 있어야 합니다.
+
+  ```javascript
+  if (condition) {
+    // 코드 1
+    // 코드 2
+    // ...코드 n...
+  }
+  ```
+
+  2. **가로 길이**
+
+  - 코드의 가로 길이가 길어진다면 여러 줄로 나눠 작성하는 게 좋습니다.
+
+  ```javascript
+  // 백틱(`)을 사용하면 문자열을 여러 줄로 쉽게 나눌 수 있습니다.
+  let str = `
+    ECMA International's TC39 is a group of JavaScript developers,
+    implementers, academics, and more, collaborating with the community
+    to maintain and evolve the definition of JavaScript.
+  `;
+  
+  if (
+    id === 123 &&
+    moonPhase === 'Waning Gibbous' &&
+    zodiacSign === 'Libra'
+  ) {
+    letTheSorceryBegin();
+  }
+  ```
+
+  3. **들여쓰기**
+
+  - 가로 들여쓰기 : 스페이스 두 개 혹은 네 개를 사용해 만듦
+  - 세로 들여쓰기: 논리 블록 사이에 넣어 코드를 분리해주는 새 줄
+
+  4. **세미콜론**
+
+  - 자바스크립트 엔진에 의해 무시되더라도 모든 구문의 끝엔 세미콜론을 써주는 것이 좋습니다.
+
+  5. **중첩 레벨**
+
+  - 가능하면 너무 깊은 중첩문은 사용하지 않도록 합시다.
+  - 반복문을 사용할 때 중첩문의 깊이가 깊어지면 `continue` 지시자를 쓰는 게 좋은 대안이 될 수도 있습니다.
+
+  ```javascript
+  for (let i = 0; i < 10; i++) {
+    if (!cond) continue;
+    ...  // <- 추가 중첩 레벨이 추가되지 않습니다.
+  }
+  ```
+
+  6. **함수의 위치**
+
+  - ‘헬퍼’ 함수 여러 개를 만들어 사용하고 있다면 아래와 같은 방법을 사용해 코드 구조를 정돈할 수 있습니다.ㄴ
+
+    - 헬퍼 함수를 사용하는 코드 *위*에서 헬퍼 함수를 모아 선언하기
+
+    ```javascript
+    // 함수 선언
+    function createElement() {
+      ...
+    }
+    function setHandler(elem) {
+      ...
+    }
+    function walkAround() {
+      ...
+    }
+    // 헬퍼 함수를 사용하는 코드
+    let elem = createElement();
+    setHandler(elem);
+    walkAround();
+    ```
+
+    - 코드를 먼저, 함수는 그 다음에 선언하기 - 대개 선호하는 방식
+
+    ```javascript
+    // 헬퍼 함수를 사용하는 코드
+    let elem = createElement();
+    setHandler(elem);
+    walkAround();
+    
+    // --- 헬퍼 함수 ---
+    function createElement() {
+      ...
+    }
+    function setHandler(elem) {
+      ...
+    }
+    function walkAround() {
+      ...
+    }
+    ```
+
+    - 혼합: 코드 바로 위에서 필요한 헬퍼 함수 그때그때 선언하기
+
 
 
 
 
 ### [03] 주석
+
+- **주석에 들어가면 좋은 내용**
+  - 고차원 수준 아키텍처
+  - 함수 용례
+  - 당장 봐선 명확해 보이지 않는 해결 방법에 대한 설명
+
+- **주석에 들어가면 좋지 않은 내용**
+  - '코드가 어떻게 동작하는지’와 '코드가 무엇을 하는지’에 대한 설명
+  - 코드를 간결하게 짤 수 없는 상황이나 코드 자체만으로도 어떤 일을 하는지 충분히 판단할 수 없는 경우에만 주석을 넣으세요.
 
 
 
