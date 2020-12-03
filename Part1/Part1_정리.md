@@ -1112,6 +1112,138 @@ https://ko.javascript.info/javascript-specials
 
 ### [01] 객체
 
+- 여덟 가지 자료형 중 일곱 개는 오직 하나의 데이터(문자열, 숫자 등)만 담을 수 있어 **'원시형(primitive type)'** 이라 부릅니다.
+- 객체형은 원시형과 달리 키로 구분된 데이터 집합이나 복잡한 개체(entity) 등의 다양한 데이터를 담을 수 있습니다.
+- 객체는 중괄호 `{…}`를 이용해 만들 수 있습니다. 중괄호 안에는 ‘키(key): 값(value)’ 쌍으로 구성된 ***프로퍼티(property)*** 를 여러 개 넣을 수 있는데, `키`엔 문자형, `값`엔 모든 자료형이 허용됩니다. 프로퍼티 키는 ‘프로퍼티 이름’ 이라고도 부릅니다.
+
+```javascript
+let user = new Object(); // '객체 생성자' 문법
+let user = {};  // '객체 리터럴' 문법 - 주로 이 방법 사용
+```
+
+- **리터럴과 프로퍼티**
+
+```javascript
+let user = {     // 객체
+  name: "John",  // 키(이름): "name",  값: "John"
+  age: 30,        // 키(이름): "age", 값: 30
+  "likes birds": true  // 복수의 단어는 따옴표로 묶어야 합니다.
+};
+// 프로퍼티 값 얻기
+alert( user.name ); // John
+alert( user.age ); // 30
+// 불린형 프로퍼티 추가
+user.isAdmin = true;
+// 프로퍼티를 삭제
+delete user.age;
+```
+
+- 상수 객체는 수정될 수 있습니다.
+
+```javascript
+// const는 user=...를 전체적으로 설정하려고 할 때만 오류가 발생합니다.
+const user = {
+  name: "John"
+};
+
+user.name = "Pete"; // 에러 발생 안 함.
+alert(user.name); // Pete
+```
+
+- 여러 단어를 조합해 프로퍼티 키를 만든 경우엔, 점 표기법을 사용해 프로퍼티 값을 읽을 수 없습니다.
+  - '점’은 키가 **'유효한 변수 식별자’** 인 경우에만 사용할 수 있습니다. 유효한 변수 식별자엔 공백이 없어야 합니다. 또한 숫자로 시작하지 않아야 하며 `$`와 `_`를 제외한 특수 문자가 없어야 합니다.
+
+```javascript
+// 문법 에러가 발생합니다.
+user.likes birds = true;
+
+let user = {};
+// set
+user["likes birds"] = true;
+// get
+alert(user["likes birds"]); // true
+// delete
+delete user["likes birds"];
+```
+
+- 객체를 만들 때 객체 리터럴 안의 프로퍼티 키가 대괄호로 둘러싸여 있는 경우, 이를 *계산된 프로퍼티(computed property)* 라고 부릅니다.
+
+```javascript
+let fruit = prompt("어떤 과일을 구매하시겠습니까?", "apple");
+let bag = {
+  [fruit]: 5, // 변수 fruit에서 프로퍼티 이름을 동적으로 받아 옵니다.
+};
+alert( bag.apple ); // fruit에 "apple"이 할당되었다면, 5가 출력됩니다.
+
+//아래 예시는 위 예시와 동일하게 동작합니다.
+let fruit = prompt("어떤 과일을 구매하시겠습니까?", "apple");
+let bag = {};
+
+// 변수 fruit을 사용해 프로퍼티 이름을 만들었습니다.
+bag[fruit] = 5;
+```
+
+- *프로퍼티 값 단축 구문(property value shorthand)* 을 사용하면 코드를 짧게 줄일 수 있습니다.
+  - 한 객체에서 일반 프로퍼티와 단축 프로퍼티를 함께 사용하는 것도 가능합니다.
+
+```javascript
+function makeUser(name, age) {
+  return {
+    name, // name: name 과 같음
+    age,  // age: age 와 같음
+    // ...
+  };
+}
+```
+
+- 객체 프로퍼티 키에 쓸 수 있는 문자열엔 제약이 없지만, 역사적인 이유 때문에 특별 대우를 받는 이름이 하나 있습니다. 바로, `__proto__`입니다.
+
+```javascript
+let obj = {};
+obj.__proto__ = 5; // 숫자를 할당합니다.
+alert(obj.__proto__); // [object Object] - 숫자를 할당했지만 값은 객체가 되었습니다. 의도한대로 동작하지 않네요.
+```
+
+- 자바스크립트 객체의 중요한 특징 중 하나는 다른 언어와는 달리, 존재하지 않는 프로퍼티에 접근하려 해도 에러가 발생하지 않고 `undefined`를 반환한다는 것입니다.
+
+```javascript
+let user = {};
+alert( user.noSuchProperty === undefined ); // true는 '프로퍼티가 존재하지 않음'을 의미합니다.
+
+// 연산자 in을 사용하면 프로퍼티 존재 여부를 확인할 수 있습니다.
+let user = { name: "John", age: 30 };
+// 프로퍼티 이름은 보통 따옴표로 감싼 문자열입니다.
+alert( "age" in user ); // user.age가 존재하므로 true가 출력됩니다.
+alert( "blabla" in user ); // user.blabla는 존재하지 않기 때문에 false가 출력됩니다.
+```
+
+- `for..in` 반복문을 사용하면 객체의 모든 키를 순회할 수 있습니다.
+- 정수 프로퍼티(integer property)는 자동으로 정렬되고, 그 외의 프로퍼티는 객체에 추가한 순서 그대로 정렬됩니다. 
+
+```javascript
+let codes = {
+  "49": "독일",
+  "41": "스위스",
+  "44": "영국",
+  // ..,
+  "1": "미국"
+};
+// '+'를 붙이면 추가된 순서대로 나열됨. "+49", '''
+for (let code in codes) {
+  alert(code); // 1, 41, 44, 49
+}
+
+let user = {
+  name: "John",
+  surname: "Smith"
+};
+user.age = 25; // 프로퍼티를 하나 추가합니다.
+// 정수 프로퍼티가 아닌 프로퍼티는 추가된 순서대로 나열됩니다.
+for (let prop in user) {
+  alert( prop ); // name, surname, age
+}
+```
+
 
 
 
