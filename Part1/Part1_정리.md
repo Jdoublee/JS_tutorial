@@ -1428,6 +1428,113 @@ alert(clone.sizes.width); // 51, 다른 객체에서 변경 사항을 확인할 
 
 ### [04] 메서드와 'this'
 
+- 객체는 사용자(user), 주문(order) 등과 같이 실제 존재하는 개체(entity)를 표현하고자 할 때 생성됩니다.
+- 자바스크립트에선 객체의 프로퍼티에 함수를 할당해 객체에게 행동할 수 있는 능력을 부여해줍니다.
+
+```javascript
+let user = {
+  name: "John",
+  age: 30
+};
+// 객체 프로퍼티에 할당된 함수를 메서드(method) 라고 부릅니다.
+user.sayHi = function() {
+  alert("안녕하세요!");
+};
+
+// 함수 선언 후 메서드로 등록도 가능
+function sayHi() {
+  alert("안녕하세요!");
+};
+
+// 선언된 함수를 메서드로 등록
+user.sayHi = sayHi;
+
+
+user.sayHi(); // 안녕하세요!
+```
+
+- 객체 리터럴 안에 메서드를 선언할 때 사용할 수 있는 단축 문법을 소개해 드리겠습니다.
+  - `function`을 생략해도 메서드를 정의할 수 있습니다.
+
+```javascript
+// 아래 두 객체는 동일하게 동작합니다.
+user = {
+  sayHi: function() {
+    alert("Hello");
+  }
+};
+// 단축 구문을 사용하니 더 깔끔해 보이네요.
+user = {
+  sayHi() { // "sayHi: function()"과 동일합니다.
+    alert("Hello");
+  }
+};
+```
+
+- **메서드 내부에서 `this` 키워드를 사용하면 객체에 접근할 수 있습니다.**
+  - 이때 '점 앞’의 `this`는 메서드를 호출할 때 사용된 객체를 나타내죠.
+
+```javascript
+let user = {
+  name: "John",
+  age: 30,
+
+  sayHi() {
+    // 'this'는 '현재 객체'를 나타냅니다.
+    alert(this.name);
+    // alert(user.name); 
+    // 'this' 대신 'user' 이용도 가능
+    // 그런데 이렇게 외부 변수를 사용해 객체를 참조하면 예상치 못한 에러가 발생할 수 있습니다. 
+  }
+};
+
+user.sayHi(); // John
+```
+
+- 자바스크립트에선 모든 함수에 `this`를 사용할 수 있습니다.
+
+  - 동일한 함수라도 다른 객체에서 호출했다면 'this’가 참조하는 값이 달라집니다.
+
+  ```javascript
+  let user = { name: "John" };
+  let admin = { name: "Admin" };
+  
+  function sayHi() {
+    alert( this.name );
+  }
+  // 별개의 객체에서 동일한 함수를 사용함
+  user.f = sayHi;
+  admin.f = sayHi;
+  // 'this'는 '점(.) 앞의' 객체를 참조하기 때문에
+  // this 값이 달라짐
+  user.f(); // John  (this == user)
+  admin.f(); // Admin  (this == admin)
+  
+  admin['f'](); // Admin (점과 대괄호는 동일하게 동작함)
+  ```
+
+  - 객체가 없어도 함수를 호출할 수 있습니다.
+
+  ```javascript
+  function sayHi() {
+    alert(this);
+  }
+  sayHi(); // undefined
+  ```
+
+- 화살표 함수는 일반 함수와는 달리 ‘고유한’ `this`를 가지지 않습니다. 화살표 함수에서 `this`를 참조하면, 화살표 함수가 아닌 ‘평범한’ 외부 함수에서 `this` 값을 가져옵니다.
+
+```javascript
+let user = {
+  firstName: "보라",
+  sayHi() {
+    let arrow = () => alert(this.firstName);
+    arrow();
+  }
+};
+user.sayHi(); // 보라
+```
+
 
 
 
