@@ -1549,6 +1549,76 @@ user.sayHi(); // 보라
 
 ### [05] 'new' 연산자와 생성자 함수
 
+- `"new"` 연산자와 생성자 함수를 사용하면 유사한 객체 여러 개를 쉽게 만들 수 있습니다.
+
+- 생성자 함수(constructor function)와 일반 함수에 기술적인 차이는 없습니다. 다만 생성자 함수는 아래 두 관례를 따릅니다.
+
+  1. 함수 이름의 첫 글자는 대문자로 시작합니다.
+  2. 반드시 `"new"` 연산자를 붙여 실행합니다.
+
+  ```javascript
+  // new User(...)가 실행되면 무슨 일이 일어나는지 살펴 보도록 하겠습니다.
+  function User(name) {
+    // this = {};  (빈 객체가 암시적으로 만들어짐)
+    
+    // 새로운 프로퍼티를 this에 추가함
+    this.name = name;
+    this.isAdmin = false;
+    // return this;  (this가 암시적으로 반환됨)
+  }
+  let user = new User("Jack");
+  alert(user.name); // Jack
+  alert(user.isAdmin); // false
+  ```
+
+- 재사용할 필요가 없는 복잡한 객체를 만들어야 할 땐 아래와 같이 코드를 익명 생성자 함수로 감싸주는 방식을 사용할 수 있습니다.
+
+```javascript
+let user = new function() {
+  this.name = "John";
+  this.isAdmin = false;
+  // 사용자 객체를 만들기 위한 여러 코드.
+  // 지역 변수, 복잡한 로직, 구문 등의
+  // 다양한 코드가 여기에 들어갑니다.
+};
+```
+
+- 생성자 함수엔 보통 `return` 문이 없습니다. 반환해야 할 것들은 모두 `this`에 저장되고, `this`는 자동으로 반환되기 때문에 반환문을 명시적으로 써 줄 필요가 없습니다.
+
+  - 그런데 만약 `return` 문이 있다면 어떤 일이 벌어질까요? 아래와 같은 간단한 규칙이 적용됩니다.
+    - 객체를 `return` 한다면, `this` 대신 객체가 반환됩니다.
+    - 원시형을 `return` 한다면, `return`문이 무시됩니다.
+
+- 인수가 없는 생성자 함수는 괄호를 생략해 호출할 수 있습니다.
+
+  ```javascript
+  let user = new User; // <-- 괄호가 없음
+  // 아래 코드는 위 코드와 똑같이 동작합니다.
+  let user = new User();
+  ```
+
+- 지금까진 `this`에 프로퍼티를 더해주는 예시만 살펴봤는데, 메서드를 더해주는 것도 가능합니다.
+
+```javascript
+function User(name) {
+  this.name = name;
+  
+  this.sayHi = function() {
+    alert( "My name is: " + this.name );
+  };
+}
+
+let john = new User("John");
+
+john.sayHi(); // My name is: John
+/*
+john = {
+   name: "John",
+   sayHi: function() { ... }
+}
+*/
+```
+
 
 
 
